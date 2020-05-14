@@ -11,10 +11,15 @@ By default we try to use the same layout used by the Hestia theme. But if you wa
 /**
  * For changing the layout of the authors displayed as post meta, use the following constant:
  */
-define('HESTIA_CHILD_AUTHORS_LAYOUT_POST_META', 'inline_avatar');
+define('HESTIA_CHILD_AUTHORS_LAYOUT_POST_META', 'inline');
 
 /**
  * For changing the layout of the authors displayed after the post content, use the following constant:
  */
 define('HESTIA_CHILD_AUTHORS_LAYOUT_AFTER_POST', 'centered');
+
+/**
+ * For changing the layout of the authors displayed after the single post meta, use the following constant:
+ */
+define('HESTIA_CHILD_AUTHORS_LAYOUT_SINGLE_POST_META', 'inline_avatar');
 ```

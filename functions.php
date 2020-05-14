@@ -12,6 +12,7 @@
 
 add_action('wp_enqueue_scripts', 'hestiaChildEnqueueStyles');
 add_filter('hestia_blog_post_meta', 'hestiaChildFilterPostMeta');
+add_filter('hestia_single_post_meta', 'hestiaChildFilterSinglePostMeta');
 
 add_action('hestia_after_single_post_article', 'hestiaChildAfterSiglePostArticle', 5);
 
@@ -47,6 +48,50 @@ function hestiaChildFilterPostMeta($output)
     $output = sprintf(
     /* translators: %1$s is Author name wrapped, %2$s is Time */
         esc_html__('By %1$s, %2$s', 'hestia'),
+        $authorNames,
+        sprintf(
+        /* translators: %1$s is Time since post, %2$s is author Close tag */
+            esc_html__('%1$s ago %2$s', 'hestia'),
+            sprintf(
+            /* translators: %1$s is Time since, %2$s is Link to post */
+                '<a href="%2$s">%1$s',
+                hestiaChildGetTimeArgs(),
+                esc_url(get_permalink())
+            ),
+            '</a>'
+        )
+    );
+
+    return $output;
+}
+
+function hestiaChildFilterSinglePostMeta($output)
+{
+    if (!defined('HESTIA_CHILD_AUTHORS_LAYOUT_SINGLE_POST_META')) {
+        $authors     = get_multiple_authors();
+        $authorNames = [];
+
+        foreach ($authors as $author) {
+            $authorNames[] = sprintf(
+            /* translators: %1$s is Author name, %2$s is author link */
+                '<a href="%2$s" title="%1$s" class="url"><b class="author-name fn">%1$s</b></a>',
+                $author->display_name,
+                $author->link
+            );
+        }
+        $authorNames = implode(', ', $authorNames);
+    } else {
+        $authorNames = do_shortcode(
+            sprintf(
+                '[author_box layout="%s" show_title="false"]',
+                HESTIA_CHILD_AUTHORS_LAYOUT_SINGLE_POST_META
+            )
+        );
+    }
+
+    $output = sprintf(
+    /* translators: %1$s is Author name wrapped, %2$s is Time */
+        esc_html__( 'Published by %1$s on %2$s', 'hestia' ),
         $authorNames,
         sprintf(
         /* translators: %1$s is Time since post, %2$s is author Close tag */
